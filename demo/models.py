@@ -11,8 +11,29 @@ class Book(models.Model):
     published = models.DateField( blank=True, null=True)
     is_published = models.BooleanField(default=False)
     cover = models.ImageField(upload_to='covers/', blank=True)
-    number = models.OneToOneField(BookNumber, null=True, blank=True,on_delete=models.CASCADE)
+    number = models.OneToOneField(BookNumber, null=True, blank=True,on_delete=models.CASCADE) 
+    #OneToOneField relationship , used in a case where we need a relationship to happen and the data must be unique
+    #a book can only have one number
+    #one number and one Booknumber
 
     def __str__(self):
         return self.title 
+class Character(models.Model):
+    name = models.CharField(max_length=30)
+    book = models.ForeignKey(Book,on_delete=models.CASCADE, null=True, related_name='characters')
+    #manyToOne relationship , used in a case where we need a relationship to happen and the data can be repeated 
+    #many books one character
 
+    def __str__(self):
+        return self.name
+
+
+class Author(models.Model):
+   name = models.CharField(max_length=30)
+   surname = models.CharField(max_length=30)
+   books = models.ManyToManyField(Book, related_name='author')
+   #an author can have many books
+   # many books and many Authors
+
+   def __str__(self):
+        return self.name
